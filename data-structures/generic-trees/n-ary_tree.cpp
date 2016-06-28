@@ -11,6 +11,13 @@ treenode(int data){
     children_count = 0;
     children = NULL;
 }
+~TreeNode(){
+		
+		cout<<"Deleting Node "<<data<<" and its children"<<endl;
+		for(int i=0;i<children_count;i++)
+			delete children[i];
+		delete [] children;
+	}
 };
 
 treenode* takeInput(){
