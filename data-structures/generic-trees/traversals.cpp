@@ -11,6 +11,13 @@ treenode(int data){
     children_count = 0;
     children = NULL;
 }
+~TreeNode(){
+		
+		cout<<"Deleting Node "<<data<<" and its children"<<endl;
+		for(int i=0;i<children_count;i++)
+			delete children[i];
+		delete [] children;
+	}
 };
 
 treenode* takeInput(){
@@ -91,6 +98,23 @@ void printPostorder(treenode* root){
     cout<<root->data<<"-->";
 }
 
+void printLevelOrder(treenode* root){
+    if(root==NULL){
+        return ;
+    }
+    queue<treenode*> q;
+    q.push(root);
+    while(!q.empty()){
+        treenode* temp = q.front();
+        q.pop();
+        cout<<temp->data<<"-->";
+        for(int i=0;i<temp->children_count;i++){
+
+            q.push(temp->children[i]);
+        }
+    }
+}
+
 int main(){
     treenode * root = NULL;
     root = takeInputByOrder();
@@ -101,5 +125,11 @@ int main(){
     cout<<"Postorder traversal is : ";
     printPostorder(root);
     cout<<endl;
+    cout<<"Level order traversal is : ";
+    printLevelOrder(root);
+    cout<<endl;
     return 0;
 }
+
+
+
