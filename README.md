@@ -1,2 +1,3 @@
-# code_in
-general coding
+# code_ing for fun
+
+happy coding :)
