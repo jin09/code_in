@@ -132,7 +132,7 @@ void insertIntoBST(binaryTreeNode*& root, int data){
     }
 }
 
-    int successorHelper(binaryTreeNode* root , int data , int case_1_element){
+    int successorHelper(binaryTreeNode* root , int data , int case_2_element){
         if(root == NULL){
             return -1;
         }
@@ -140,13 +140,13 @@ void insertIntoBST(binaryTreeNode*& root, int data){
             return successorHelper(root->left,data, root->data);
         }
         else if(data > root->data){
-            return successorHelper(root->right, data, case_1_element);
+            return successorHelper(root->right, data, case_2_element);
         }
         else if(data == root->data){
             //element is found
             if(root->right == NULL){
                 //case 2
-                return case_1_element;
+                return case_2_element;
             }
             else{
                 return findMin(root->right);
