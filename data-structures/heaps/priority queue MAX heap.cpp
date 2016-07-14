@@ -112,7 +112,7 @@ for(int i=0;i<6;i++){
 }
 
 //pq.print();
-//cout<<endl;
+//cout<<endl;st
 
 
 cout<<"Heap sort (should be in descending order because it is MAX heap) : ";
