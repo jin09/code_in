@@ -34,7 +34,7 @@ private:
                 return;
             }
         }
-        //only left child is in range of the array
+        //only left child is in range of the array 
         if(leftChild<index){
             //the parent node is sitting wrong
             if(arr[i]>arr[leftChild]){
