@@ -1,3 +1,4 @@
+/*BFS By Adjecency matrix*/
 #include <bits/stdc++.h>
 #define max 20
 using namespace std;
