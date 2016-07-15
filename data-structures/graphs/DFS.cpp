@@ -1,3 +1,4 @@
+/*DFS by adjacency matrix*/
 #include <bits/stdc++.h>
 #define max 20
 using namespace std;
