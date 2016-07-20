@@ -4,7 +4,7 @@ Binary Search
 #include<bits/stdc++.h>
 using namespace std;
 
-bool binarySearch(int* arr, int startIndex, int endIndex, int key){
+bool binarySearch(int* arr, int startIndex, int endIndex, int key){ 
 
     if(startIndex > endIndex){
 
