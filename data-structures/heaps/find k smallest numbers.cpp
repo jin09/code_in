@@ -12,21 +12,21 @@ class priorityQueueMin{
     int currentSize;
 private:
 
-    void heapify(int i){
-        int leftChild = (2*i)+1;
-        int rightChild = (2*i)+2;
-        //both the children are in range
-        if(leftChild<currentSize && rightChild<currentSize){
-            if(arr[leftChild]<arr[i]){
-                swap(arr[i],arr[leftChild]);
-                heapify(leftChild);
+    if(leftChild<currentSize && rightChild<currentSize){
+            // i is not at right position
+            if(arr[i]>arr[leftChild] || arr[i]>arr[leftChild]){
+                if(arr[leftChild] < arr[rightChild]){
+                    swap(arr[i],arr[leftChild]);
+                    heapify(leftChild);
+                }
+                else{
+                    swap(arr[i],arr[rightChild]);
+                    heapify(rightChild);
+                }
             }
-            else if(arr[rightChild]<arr[i]){
-                swap(arr[i],arr[rightChild]);
-                heapify(rightChild);
-            }
+            // i is at right position
             else{
-                return ;
+                return;
             }
         }
         //only left child is in range
@@ -45,10 +45,6 @@ private:
             else{
                 return;
             }
-        }
-        //none of the children are in range
-        else{
-            return;
         }
     }
 
