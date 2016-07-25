@@ -12,39 +12,41 @@ class priorityQueueMin{
     int currentSize;
 private:
 
-    if(leftChild<currentSize && rightChild<currentSize){
-            // i is not at right position
-            if(arr[i]>arr[leftChild] || arr[i]>arr[leftChild]){
+    void minHeapify(int i){
+        int leftChild = (2*i)+1;
+        int rightChild = (2*i)+2;
+        //both the children are in range
+        if(leftChild<currentSize && rightChild<currentSize){
+            if(arr[i]>arr[leftChild] || arr[i]>arr[rightChild]){
                 if(arr[leftChild] < arr[rightChild]){
                     swap(arr[i],arr[leftChild]);
-                    heapify(leftChild);
+                    minHeapify(leftChild);
                 }
                 else{
                     swap(arr[i],arr[rightChild]);
-                    heapify(rightChild);
+                    minHeapify(rightChild);
                 }
             }
-            // i is at right position
             else{
                 return;
             }
         }
-        //only left child is in range
+        //only left Child is in range
         if(leftChild<currentSize){
             if(arr[leftChild]<arr[i]){
                 swap(arr[i],arr[leftChild]);
-                heapify(leftChild);
+                minHeapify(leftChild);
             }
         }
-        //only right child is in range
         if(rightChild<currentSize){
             if(arr[rightChild]<arr[i]){
                 swap(arr[i],arr[rightChild]);
-                heapify(rightChild);
+                minHeapify(rightChild);
             }
-            else{
-                return;
-            }
+        }
+        //all the children are out of range
+        else{
+            return;
         }
     }
 
@@ -83,7 +85,7 @@ public:
         currentSize = n;
 
         for(int i=n/2;i>=0;i--){
-            heapify(i);
+            minHeapify(i);
         }
     }
 
@@ -97,7 +99,7 @@ public:
         index--;
         currentSize--;
         arr.pop_back();
-        heapify(0);
+        minHeapify(0);
         return save;
     }
 
