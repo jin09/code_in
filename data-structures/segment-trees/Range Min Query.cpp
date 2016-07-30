@@ -1,3 +1,7 @@
+/**
+* RANGE MIN QUERY
+*/
+
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -60,6 +64,34 @@ int rangeMinQuery(int* segTree, int segTreeLow, int segTreeHigh, int findLow, in
 
 }
 
+void updateValueInRange(int* segTree, int segTreeLow, int segTreeHigh, int updateLow, int updateHigh, int updateValue, int pos){
+    /**
+    * Partial Overlap : Go in both the directions
+    * Total Overlap : Go in both direction till you reach the leaf node (segTreeLow == segTreeHigh)
+    * No Overlap : Return without doing anything
+    */
+
+    //No Overlap
+    if(segTreeHigh < updateLow || segTreeLow > updateHigh){
+        return;
+    }
+    //Leaf node is reached
+    if(segTreeLow == segTreeHigh){
+        segTree[pos] = segTree[pos] + updateValue;
+        return ;
+    }
+    // partial Overlap OR Total ovrelap
+
+    /**DIVIDING STEP*/
+
+    int mid = (segTreeHigh + segTreeLow)/2;
+    updateValueInRange(segTree,segTreeLow,mid,updateLow,updateHigh,updateValue,(2*pos)+1);
+    updateValueInRange(segTree,mid + 1,segTreeHigh,updateLow,updateHigh,updateValue,(2*pos)+2);
+
+    /**CONQUOR STEP*/
+
+    segTree[pos] = min(segTree[(2*pos)+1], segTree[(2*pos)+2]);
+}
 
 int main(){
 int arr[] = {-1,3,4,0,2,1};
@@ -75,5 +107,16 @@ cout<<endl;
 cout<<"Min in range 2 to 4 is "<<rangeMinQuery(segTree,0,n-1,2,4,0)<<endl;
 
 cout<<"Min in range 0 to 4 is "<<rangeMinQuery(segTree,0,n-1,0,4,0)<<endl;
+
+cout<<"Adding 3 to the nodes in range 2 to 4.... "<<endl;
+
+updateValueInRange(segTree,0,n-1,2,4,3,0);
+
+cout<<"Sum in range 2 to 4 after updation is "<<rangeMinQuery(segTree,0,n-1,2,4,0)<<endl;
+
+cout<<"Sum in range 0 to 4 after updation is "<<rangeMinQuery(segTree,0,n-1,0,4,0)<<endl;
 return 0;
 }
+
+
+
