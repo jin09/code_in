@@ -153,11 +153,11 @@ void printPreOrder(binaryTreeNode* root){
 //also refer http://www.geeksforgeeks.org/construct-tree-from-given-inorder-and-preorder-traversal/
 
 //start and end indexes are for the inorder array
-binaryTreeNode* buildTreeFromPreAndIn(int* preorder, int* inorder, int start, int end){
+binaryTreeNode* buildTreeFromPreAndIn(int* preorder, int* inorder, int inorder_start, int inorder_end){
 
     static int preindex = 0;
     //base case or the returning case
-    if(start > end){
+    if(inorder_start > inorder_end){
         return NULL;
     }
 
@@ -174,8 +174,8 @@ binaryTreeNode* buildTreeFromPreAndIn(int* preorder, int* inorder, int start, in
         }
     }
 
-    node->left = buildTreeFromPreAndIn(preorder,inorder,start,k-1);
-    node->right = buildTreeFromPreAndIn(preorder,inorder,k+1,end);
+    node->left = buildTreeFromPreAndIn(preorder,inorder,inorder_start,k-1);
+    node->right = buildTreeFromPreAndIn(preorder,inorder,k+1, inorder_end);
     return node;
 }
 
