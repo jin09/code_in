@@ -1,3 +1,4 @@
+
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -149,40 +150,30 @@ void printPreOrder(binaryTreeNode* root){
 }
 
 
-//refer this short vid before starting : https://www.youtube.com/watch?v=2OYj9-NjBno
-//also refer http://www.geeksforgeeks.org/construct-tree-from-given-inorder-and-preorder-traversal/
+//refer your nb
 
 //start and end indexes are for the inorder array
-binaryTreeNode* buildTreeFromInorderAndPostorder(int * postorder, int * inorder, int post_start, int post_end, int in_start,int in_end){
-    if(in_start>in_end){
+binaryTreeNode* buildTreeFromInorderAndPostorder(int * postorder, int * inorder, int &post_end, int in_start,int in_end){
+    if(post_end < 0){
         return NULL;
     }
-
-    if(in_start == in_end){
-        int data = postorder[post_end];
-        binaryTreeNode* node = new binaryTreeNode(data);
-        return node;
+    if(in_start > in_end){
+        return NULL;
     }
-    //create node
     int data = postorder[post_end];
+    //cout<<data<<endl;
     binaryTreeNode* node = new binaryTreeNode(data);
-
-    int k_in_inorder = 0;
-    for(int i=in_start;i<in_end;i++){
-        if(inorder[i]==data){
-            k_in_inorder = i;
+    int save_pos = 0;
+    for(int i=in_start;i<=in_end;i++){
+        if(inorder[i] == data){
+            save_pos = i;
             break;
         }
     }
-    int k_in_postorder = 0;
-    for(int i=post_start;i<post_end;i++){
-        if(postorder[i] == inorder[k_in_inorder+1]){
-            k_in_postorder = i;
-            break;
-        }
-    }
-    node->left = buildTreeFromInorderAndPostorder(postorder,inorder,post_start,k_in_postorder-1,in_start,k_in_inorder-1);
-    node->right = buildTreeFromInorderAndPostorder(postorder,inorder,k_in_postorder,post_end-1,k_in_inorder+1,in_end);
+    //cout<<"save pos "<<save_pos<<endl;
+    post_end--;
+    node->right = buildTreeFromInorderAndPostorder(postorder, inorder, post_end, save_pos+1, in_end);
+    node->left = buildTreeFromInorderAndPostorder(postorder, inorder, post_end, in_start, save_pos-1);
     return node;
 }
 
@@ -190,8 +181,8 @@ int main(){
 
 int postorder[] = {10,40,30,60,90,70,50};
 int inorder[] = {10,30,40,50,60,70,90};
-
-binaryTreeNode* root = buildTreeFromInorderAndPostorder(postorder,inorder,0,6,0,6);
+int postend = 6;
+binaryTreeNode* root = buildTreeFromInorderAndPostorder(postorder,inorder,postend,0,6);
 cout<<"Built tree from inorder and postorder is "<<endl<<endl;
 printPretty(root, 4, 3, cout);
 return 0;
