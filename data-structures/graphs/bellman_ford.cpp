@@ -28,7 +28,7 @@ public:
         for(int i=0;i<vertices;i++){
                 isDistGettingBetter = false;
             for(int j=0;j<arr.size();j++){
-                if(dist[j] != -1){
+                if(dist[j] != INT_MAX){
                     for(int k=0;k<arr[j].size();k++){
                         pair<int, int> top = arr[j][k];
                         int new_dist = dist[j] + top.second;
