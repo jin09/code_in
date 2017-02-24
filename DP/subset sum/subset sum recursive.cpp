@@ -8,7 +8,12 @@ bool subsetSum(int arr[], int sum, int n){
     if(sum == 0){
         return true;
     }
-    return subsetSum(arr, sum-arr[n], n-1) || subsetSum(arr, sum, n-1);
+    if(sum > arr[n]){
+        return subsetSum(arr, sum-arr[n], n-1) || subsetSum(arr, sum, n-1);
+    }
+    else{
+        return subsetSum(arr, sum, n-1);
+    }
 }
 
 int main(){
@@ -18,3 +23,4 @@ int main(){
     cout<<subsetSum(arr, sum, n-1);
     return 0;
 }
+
