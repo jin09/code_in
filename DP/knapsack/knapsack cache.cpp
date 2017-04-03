@@ -1,57 +1,73 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-int knapsack(int val[], int wt[], int capacity, int n, int** cache){
+int knapsack(int val[], int wt[], int capacity, int n){
     if(n<0){
         return 0;
     }
+    if(capacity <= 0){
+        return 0;
+    }
     if(capacity >= wt[n]){
-        int first,second;
-        int a = capacity-wt[n];
-        if(n-1 >= 0){
-            if(cache[n-1][a] != -1){
-                first = cache[n-1][a];
-            }
-            else{
-                first = knapsack(val, wt, capacity-wt[n], n-1, cache);
-                cache[n-1][a] = first;
-                //cout<<n-1<<" "<<a<<endl;
-            }
-        }
-        else{
-            first = knapsack(val, wt, capacity-wt[n], n-1, cache);
-        }
-        if(n-1 >= 0){
-            if(cache[n-1][capacity] != -1){
-                second = cache[n-1][capacity];
-            }
-            else{
-                second = knapsack(val, wt, capacity, n-1, cache);
-                cache[n-1][capacity] = second;
-                //cout<<n-1<<" "<<capacity<<endl;
-            }
-        }
-        else{
-            second = knapsack(val, wt, capacity, n-1, cache);
-        }
-        return max(first+val[n],second);
+        return max(knapsack(val, wt, capacity-wt[n], n-1) + val[n], knapsack(val, wt, capacity, n-1));
     }
     else{
-        int temp;
+        return knapsack(val, wt, capacity, n-1);
+    }
+}
+
+int knapsackMemo(int val[], int wt[], int capacity, int n, int** cache){
+
+    if(n < 0){
+        return 0;
+    }
+    if(capacity <= 0){
+        return 0;
+    }
+    if(capacity >= wt[n]){
+        int including, excluding;
         if(n-1 >= 0){
-            if(cache[n-1][capacity] != -1){
-                temp = cache[n-1][capacity];
+            if(cache[n-1][capacity-wt[n]] != -1){
+                including = cache[n-1][capacity-wt[n]] + val[n];
             }
             else{
-                temp = knapsack(val, wt, capacity, n-1, cache);
-                cache[n-1][capacity] = temp;
-                //cout<<n-1<<" "<<capacity<<endl;
+                int temp = knapsackMemo(val, wt, capacity-wt[n], n-1, cache);
+                cache[n-1][capacity-wt[n]] = temp;
+                including = cache[n-1][capacity-wt[n]] + val[n];
+            }
+            if(cache[n-1][capacity] != -1){
+                excluding = cache[n-1][capacity];
+            }
+            else{
+                excluding = knapsackMemo(val, wt, capacity, n-1, cache);
+                cache[n-1][capacity] = excluding;
+            }
+            cache[n][capacity] = max(including, excluding);
+            return cache[n][capacity];
+        }
+        else{
+            including = val[n];
+            excluding = 0;
+            cache[n][capacity] = max(including, excluding);
+            return cache[n][capacity];
+        }
+    }
+    else{
+        int excluding;
+        if(n-1 >= 0){
+            if(cache[n-1][capacity] != -1){
+                excluding = cache[n-1][capacity];
+                return excluding;
+            }
+            else{
+                excluding = knapsackMemo(val, wt, capacity, n-1, cache);
+                cache[n-1][capacity] = excluding;
+                return excluding;
             }
         }
         else{
-            temp = knapsack(val, wt, capacity, n-1, cache);
+            return 0;
         }
-        return temp;
     }
 }
 
@@ -60,27 +76,24 @@ int main(){
     int wt[] = {10, 20, 30};
     int  W = 50;
     int n = sizeof(val)/sizeof(val[0]);
+    cout<<knapsack(val, wt, W, n-1);
+    cout<<endl;
+
     int** cache = new int*[n+1];
-    for(int i=0;i<n+1;i++){
+    for(int i=0;i<=n;i++){
         cache[i] = new int[W+1];
     }
-    for(int i=0;i<n+1;i++){
-        for(int j=0;j<W+1;j++){
+    for(int i=0;i<=n;i++){
+        for(int j=0;j<=W;j++){
             cache[i][j] = -1;
         }
     }
-    cout<<"Maximum value we can get from bag can be: "<<knapsack(val, wt, W, n-1, cache)<<endl;
-    /*
-    for(int i=0;i<n+1;i++){
-        for(int j=0;j<W+1;j++){
-            cout<<cache[i][j]<<" ";
-        }
-        cout<<endl;
+    cout<<knapsackMemo(val, wt, W, n-1, cache);
+
+    for(int i=0;i<=n;i++){
+        delete [] cache[i];
     }
-    */
-    for(int i=0;i<n+1;i++){
-        delete[] cache[i];
-    }
-    delete[] cache;
+    delete [] cache;
     return 0;
 }
+
