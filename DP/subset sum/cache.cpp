@@ -1,62 +1,44 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-bool subsetSum(int arr[], int sum, int n, int** cache){
-    if(n<0){
+bool subsetSumCache(int arr[], int sum, int n, int** cache){
+    if(n < 0){
         return false;
     }
     if(sum == 0){
         return true;
     }
-    if(sum >= arr[n]){
-        int first, second;
-        if(n-1 >= 0 && sum-arr[n] >= 0){
-            if(cache[n-1][sum-arr[n]] != -1){
-                first = cache[n-1][sum-arr[n]];
-                cout<<"cache hit!!"<<endl;
-            }
-            else{
-                first = subsetSum(arr, sum-arr[n], n-1, cache);
-                cache[n-1][sum-arr[n]] = first;
-                cout<<"cache miss!!"<<endl;
-            }
+    if(sum < 0){
+        return false;
+    }
+    int including, excluding;
+    if(n-1 >= 0){
+        if(cache[n-1][sum-arr[n]] != -1){
+            including = cache[n-1][sum-arr[n]];
         }
         else{
-            first = subsetSum(arr, sum-arr[n], n-1, cache);
+            including = subsetSumCache(arr, sum-arr[n], n-1, cache);
+            cache[n-1][sum-arr[n]] = including;
         }
-        if(n-1 >= 0){
-            if(cache[n-1][sum] != -1){
-                second = cache[n-1][sum];
-                cout<<"cache hit!!"<<endl;
-            }
-            else{
-                second = subsetSum(arr, sum, n-1, cache);
-                cache[n-1][sum] = second;
-                cout<<"cache miss!!"<<endl;
-            }
+        if(cache[n-1][sum] != -1){
+            excluding = cache[n-1][sum];
         }
         else{
-            second = subsetSum(arr, sum, n-1, cache);
+            excluding = subsetSumCache(arr, sum, n-1, cache);
+            cache[n-1][sum] = excluding;
         }
-        return first || second;
+        cache[n][sum] = including || excluding;
+        return cache[n][sum];
     }
     else{
-        int second;
-        if(n-1 >= 0){
-            if(cache[n-1][sum] != -1){
-                second = cache[n-1][sum];
-                cout<<"cache hit!!"<<endl;
-            }
-            else{
-                second = subsetSum(arr, sum, n-1, cache);
-                cache[n-1][sum] = second;
-                cout<<"cache miss!!"<<endl;
-            }
+        if(sum-arr[n] == 0){
+            cache[n][sum] = 1;
+            return cache[n][sum];
         }
         else{
-            second = subsetSum(arr, sum, n-1, cache);
+            cache[n][sum] = 0;
+            return cache[n][sum];
         }
-        return second;
     }
 }
 
@@ -73,7 +55,7 @@ int main(){
             cache[i][j] = -1;
         }
     }
-    cout<<subsetSum(arr, sum, n-1, cache);
+    cout<<subsetSumCache(arr, sum, n-1, cache);
     for(int i=0;i<n+1;i++){
         delete[] cache[i];
     }
