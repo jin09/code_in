@@ -23,17 +23,18 @@ int knapsackMemo(int val[], int wt[], int W, int n, int** cache){
         return cache[n][W];
     }
     if(wt[n] <= W){
-        int including = knapsack(val, wt, W-wt[n], n-1) + val[n];
-        int excluding = knapsack(val, wt, W, n-1);
+        int including = knapsackMemo(val, wt, W-wt[n], n-1, cache) + val[n];
+        int excluding = knapsackMemo(val, wt, W, n-1, cache);
         cache[n][W] = max(including, excluding);
         return cache[n][W];
     }
     else{
-        int excluding = knapsack(val, wt, W, n-1);
+        int excluding = knapsackMemo(val, wt, W, n-1, cache);
         cache[n][W] = excluding;
         return cache[n][W];
     }
 }
+
 
 int main(){
     int val[] = {60, 100, 120};
