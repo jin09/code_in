@@ -10,10 +10,7 @@ void LISHelper(int arr[], int n, int i, int current_size, int last_maxx, int &ma
         return;
     }
     ///INCLUDING
-    if(last_maxx == INT_MIN){
-        LISHelper(arr, n, i+1, current_size+1, arr[i], maxx);
-    }
-    else if(last_maxx != INT_MIN && arr[i] > last_maxx){
+    if(arr[i] > last_maxx){
         LISHelper(arr, n, i+1, current_size+1, arr[i], maxx);
     }
     ///EXCLUDING
