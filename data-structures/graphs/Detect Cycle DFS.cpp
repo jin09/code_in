@@ -13,26 +13,33 @@ public:
         arr[v].push_back(u);
     }
 
-    bool detectCycleHelper(bool* visited, int current_node){
+    bool detectCycleHelper(bool* visited, bool* recursion_stack, int current_node){
         visited[current_node] = true;
+        recursion_stack[current_node] = true;
         for(int i=0;i<arr[current_node].size();i++){
-            if(visited[arr[current_node][i]] == true){
+            if(recursion_stack[arr[current_node][i]] == true){
                 return true;
             }
-            else{
-                return detectCycleHelper(visited, arr[current_node][i]);
+            else if(visited[arr[current_node][i]] == false){
+                bool res = detectCycleHelper(visited, recursion_stack, arr[current_node][i]);
+                if(res == true){
+                    return true;
+                }
             }
         }
+        recursion_stack[current_node] = false;
         return false;
     }
 
     bool detectCycle(){
         bool* visited = new bool[vertices];
+        bool* recursion_stack = new bool[vertices];
         for(int i=0;i<vertices;i++){
             visited[i] = false;
+            recursion_stack[i] = false;
         }
         for(int i=0;i<vertices;i++){
-            bool ans = detectCycleHelper(visited, i);
+            bool ans = detectCycleHelper(visited, recursion_stack, i);
             if(ans){
                 return true;
             }
