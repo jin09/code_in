@@ -6,32 +6,31 @@ We are to calculate the minimum number of coins that are needed to get to a sum.
 #include<bits/stdc++.h>
 using namespace std;
 
+int MinCoinChangeHelper(int arr[], int n, int target, int current){
+    if(target == 0){
+        return current;
+    }
+    if(target < 0){
+        return INT_MAX;
+    }
+    if(n < 0){
+        return INT_MAX;
+    }
+    
+    int including = MinCoinChangeHelper(arr, n, target-arr[n], current+1);
+    int excluding = MinCoinChangeHelper(arr, n-1, target, current);
 
-int minCoins = INT_MAX;
+    return min(including, excluding);
+}
 
-void minCoinsRecursive(int* arr, int sum, int n, int numberOfCoins){
-    if(sum==0){
-        minCoins = min(minCoins,numberOfCoins);
-        return;
-    }
-    if(sum<0){
-        return;
-    }
-    if(n<0){
-        return;
-    }
-    //include the coin
-    minCoinsRecursive(arr,sum-arr[n],n,numberOfCoins+1);
-    //dont include the coin
-    minCoinsRecursive(arr,sum,n-1,numberOfCoins);
+int MinCoinChange(int arr[], int n, int target){
+    return MinCoinChangeHelper(arr, n-1, target, 0);
 }
 
 int main(){
-
-int arr[] = {1,5,6,8};
-int sum = 11;
-int n = sizeof arr/sizeof arr[0];
-minCoinsRecursive(arr,sum,sizeof arr/sizeof arr[0],0);
-cout<<"Min number of coins that are needed to get a sum of 11 are : "<< minCoins;
-return 0;
+    int arr[] = {1, 5, 10, 25};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    int target = 32;
+    cout<<MinCoinChange(arr, n, target);
+    return 0;
 }
